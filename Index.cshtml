@@ -1,0 +1,60 @@
+﻿@using WebMatrix.Data
+<link href="https://bootswatch.com/5/flatly/bootstrap.min.css" rel="stylesheet" type="text/css" />
+@{
+    var db = Database.Open("FoodDB");
+    var sql = "select * from orders as o left join stores as s\r\non o.store_id=s.store_id where o.order_id LIKE CONCAT(@0, '%') or o.order_status LIKE CONCAT(@0,'%') or o.order_amount LIKE CONCAT(@0,'%')";
+    //var sql = "select * from orders_new";
+    var output = db.Query(sql, Request.Form["searchText"]);
+
+    //var order_status_sql = "select distinct order_status from orders";
+    //var order_status_data = db.Query(order_status_sql);
+}
+<main>
+    <h2>All Orders</h2>
+
+    <div class="row">
+        <form method="post" action="/Home/Index">
+            <div class="input-group">
+                @*<select class="custom-select" placeholder=" Search by Order Status" ">
+                        @foreach (var i in order_status_data)
+                        {
+                            <option value=@i.order_status>@i.order_status</option>
+                        }
+                    </select>*@
+                <div class="col-lg-9 mb-1">
+                    <input type="text" name="searchText" class="form-control" placeholder="SearchText" />
+                </div>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Search by Order Status</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    @if (output.Count() > 0)
+    {
+        <div class="row">
+            @foreach (var i in output)
+            {
+                <div class="card" style="width: 18rem; margin:10px; padding:0 0">
+                    <h5 class="card-header">@i.order_id</h5>
+                    <div class="card-body">
+                        <img class="card-img-top" src="https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png" alt="Card image cap">
+                        <p class="card-title">@i.order_status</p>
+                        <p class="card-text">@i.order_amount.ToString("C")</p>
+                        <p class="card-text">Channel: @i.channel_id</p>
+                        <h6>Store Details</h6>
+                        <p class="card-text">@i.store_name</p>
+                        <p class="card-text">@i.store_segment</p>
+                        <p class="card-text">@i.store_plan_price</p>
+                        <a href="/Home/Details?id=@i.order_id" class="btn btn-primary">See details</a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <h2 class="text-danger text-center">Oops! No matching orders found...</h2>
+    }
+</main>
