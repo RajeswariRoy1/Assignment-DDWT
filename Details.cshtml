@@ -8,9 +8,9 @@
 <script src="../Scripts/popper.js"></script>
 @{
     var db = Database.Open("FoodDB");
-    var sql = "select * from drivers as d join deliveries as deli on d.driver_id = deli.driver_id join orders as o on deli.delivery_order_id = o.order_id join payments as p on o.order_id = p.payment_order_id join channels as c on o.channel_id = c.channel_id where order_id=@0";
-    var recordID = Request.QueryString["id"];
-    var i = db.QuerySingle(sql, recordID);
+    var sql = "select * from drivers as d join deliveries as deliver on d.driver_id = deliver.driver_id join orders as o on deliver.delivery_order_id = o.order_id join payments as pay on o.order_id = pay.payment_order_id join channels as c on o.channel_id = c.channel_id where order_id=@0";
+    var orderID = Request.QueryString["OrderID"];
+    var i = db.QuerySingle(sql, orderID);
 
 }
 
@@ -20,7 +20,7 @@
         <h2 class="text-center">Details Page</h2>
     </div>
 
-    <form class="rown form-group" method="post" action="/Home/Details?id">
+    <form class="rown form-group" method="post" action="/Home/Details?OrderID">
         <div class="row justify-content-start">
         </div>
     </form>
