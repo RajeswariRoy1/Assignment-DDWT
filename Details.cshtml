@@ -9,8 +9,8 @@
 @{
     var db = Database.Open("FoodDB");
     var sql = "select * from drivers as d join deliveries as deliver on d.driver_id = deliver.driver_id join orders as o on deliver.delivery_order_id = o.order_id join payments as pay on o.order_id = pay.payment_order_id join channels as c on o.channel_id = c.channel_id where order_id=@0";
-    var orderID = Request.QueryString["OrderID"];
-    var i = db.QuerySingle(sql, orderID);
+    var oID = Request.QueryString["OrderID"];
+    var i = db.QuerySingle(sql, oID);
 
 }
 
@@ -33,9 +33,12 @@
                 <details>
                     <summary><b>Order Details</b></summary>
                     <p>
-                        <p class="card-title">Order ID: @i.order_id</p>
-                        <p class="card-text">Order Status: @i.order_status</p>
-                        <p class="card-text">Order Amount: @i.order_amount</p>
+                        <p class="card-title">Order_ID: @i.order_id</p>
+                        <p class="card-text">Order_Status: @i.order_status</p>
+                        <p class="card-text">Order_Amount: @i.order_amount</p>
+                        <p class="card-text">Order_Amount: @i.order_amount</p>
+
+
                     </p>
                 </details>
 
