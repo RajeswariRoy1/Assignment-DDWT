@@ -6,17 +6,16 @@
 @{
     var db = Database.Open("FoodDB");
     var sql = "select * from orders as o left join stores as s\r\non o.store_id=s.store_id where o.order_id LIKE CONCAT(@0, '%') or o.order_status LIKE CONCAT(@0,'%') or o.order_amount LIKE CONCAT(@0,'%')";
-    var output = db.Query(sql, Request.Form["searchText"]);
+    var output = db.Query(sql, Request.Form["SearchOrder"]);
 }
 <main class="Container">
     <div class="jumbotron pt-1 pb-1 mt-2 ">
         <h2 class="text-center">All Orders</h2>
     </div>
-
     <div class="row">
         <form method="post" action="/Home/Index">
-                <div class="col mb-1">
-                    <input type="text" name="searchText" class="form-control" placeholder="SearchText" />
+                <div class="col-6 mb-1">
+                    <input type="text" name="SearchOrder" class="form-control" placeholder="SearchOrder" />
                 </div>
                 <div class="input-group-append">
                     <button class="btn btn-primary" type="submit">Search By Order Status</button>
@@ -30,7 +29,7 @@
         <div class="row">
             @foreach (var i in output)
             {
-                <div class="card" style="width: 18rem auto">
+                <div class="card" style="width: 18rem; margin:12px; padding:0 0">
                     <h4 class="card-header">Order ID@i.order_id</h4>
                     <div class="card-body">
                         <img class="card-img-top" src="https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png" alt="Card image cap">
