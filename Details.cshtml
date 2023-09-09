@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+</html>
+@using WebMatrix.Data
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="../Scripts/jquery-3.5.1.js"></script>
+<script src="../Scripts/bootstrap.js"></script>
+<script src="../Scripts/popper.js"></script>
+@{
+    var db = Database.Open("FoodDB");
+    var sql = "select * from drivers as d join deliveries as deli on d.driver_id = deli.driver_id join orders as o on deli.delivery_order_id = o.order_id join payments as p on o.order_id = p.payment_order_id join channels as c on o.channel_id = c.channel_id where order_id=@0";
+    var recordID = Request.QueryString["id"];
+    var i = db.QuerySingle(sql, recordID);
+
+}
+
+
+<main class="container">
+    <div class="jumbotron pt-1 pb-1 mt-2">
+        <h2 class="text-center">Details Page</h2>
+    </div>
+
+    <form class="rown form-group" method="post" action="/Home/Details?id">
+        <div class="row justify-content-start">
+        </div>
+    </form>
+
+    @if (i != null)
+    {
+        <div class="row justify-content-center">
+
+            <div class="card ">
+                <details>
+                    <summary><b>Order Details</b></summary>
+                    <p>
+                        <p class="card-title">Order ID: @i.order_id</p>
+                        <p class="card-text">Order Status: @i.order_status</p>
+                        <p class="card-text">Order Amount: @i.order_amount</p>
+                    </p>
+                </details>
+
+
+                <details>
+                    <summary><b>Channel Details</b></summary>
+                    <p>
+                    <p class="card-text">Channel ID: @i.channel_id</p>
+                    <p class="card-text">Channel Name: @i.channel_name</p>
+                    <p class="card-text">Cahnnel Type: @i.channel_type</p>
+                    </p>
+                </details>
+                <details>
+                    <summary><b>Delivery Details</b></summary>
+                    <p>
+                    <p class="card-text">Delivery ID: @i.delivery_id</p>
+                    <p class="card-text">Delivery Order ID: @i.delivery_order_id</p>
+                    <p class="card-text">Delivery Status: @i.delivery_status</p>
+                    </p>
+                </details>
+                <details>
+                    <summary><b>Driver Details</b></summary>
+                    <p>
+                    <p class="card-text">Driver ID: @i.driver_id</p>
+                    <p class="card-text">Driver Modal: @i.driver_modal</p>
+                    <p class="card-text">Driver Type: @i.driver_type</p>
+                    </p>
+                </details>
+
+            </div>
+        </div>
+    }
+    else
+    {
+        <h2 class="text-danger text-center">Oops - That order was not found!</h2>
+
+    }
+
+</main>
