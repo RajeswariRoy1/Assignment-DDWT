@@ -1,0 +1,94 @@
+﻿@using WebMatrix.Data;
+<link rel="stylesheet" href="/Content/Site.css">
+@{
+            var db = Database.Open("FoodDB");
+            var sql = "select * from orders_new as o\r\njoin stores as s\r\non o.store_id = s.store_id\r\njoin hubs as h\r\non h.hub_id = s.hub_id\r\n where h.hub_name LIKE CONCAT(@0,'%')";
+            var data = db.Query(sql, Request.Form["searchHub"]);
+
+            var hSql = "select hub_name from hubs ";
+            var hdata = db.Query(hSql);
+            if (IsPost)
+            {
+                var dSql = "DELETE FROM orders_new WHERE order_id=@0";
+                var dData = db.Execute(dSql, Request.Form["delete"]);
+
+                if (dData == 1)
+                {
+            <div class="alert alert-success">Order has been successfully deleted!</div>
+        }
+
+}
+
+
+}
+<div class="jumbotron pt-1 pb-1 mt-2 ">
+    <h2 class="text-center">Hub Orders Report</h2>
+</div>
+
+
+
+    <div class="row">
+        <form method="post" action="/Home/OrderHubs">
+            <div class="input-group">
+                <div class="col-4">
+                    <select class="form-control" name="searchHub">
+                        <option> Select by hub </option>
+                        @foreach (var i in hdata)
+                        {
+                            <option>@i.hub_name</option>
+                        }
+                    </select>
+                </div>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Search by Hub</button>
+                </div>
+            </div>
+    </form>
+    </div>
+
+<br />
+
+
+    <form method="post" action="/Home/OrderHubs">
+        <table class="">
+            <thead>
+                <tr>
+                    <th scope="col">Order_ID</th>
+                    <th scope="col">Hub_ID</th>
+                    <th scope="col">Hub_Name</th>
+                    <th scope="col">Order_Amount($)</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+
+            @foreach (var row in data)
+            {
+                <tbody id="test">
+                    <tr>
+                        <th scope="row">@row.order_id</th>
+                        <th scope="row">@row.hub_id</th>
+                        <th scope="row">@row.hub_name</th>
+                        <th scope="row">@row.order_amount.ToString("C")</th>
+
+
+                        <th>
+                            <a class="btn btn-primary" href="/home/Details?id=@row.order_id" role="button">Edit </a>
+                            <button type="submit" name="delete" class="btn btn-outline-danger" value="@row.order_id">Delete</button>
+                        </th>
+
+                    </tr>
+                </tbody>
+            }
+        </table>
+    </form>
+
+
+
+
+
+
+
+
+
+
+
