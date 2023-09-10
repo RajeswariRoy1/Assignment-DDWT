@@ -2,10 +2,7 @@
 <html lang="en">
 </html>
 @using WebMatrix.Data
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<script src="../Scripts/jquery-3.5.1.js"></script>
-<script src="../Scripts/bootstrap.js"></script>
-<script src="../Scripts/popper.js"></script>
+<link rel="stylesheet" href="/Content/Site.css">
 @{
     var db = Database.Open("FoodDB");
     var sql = "select * from orders_new as o left join stores as s\r\non o.store_id=s.store_id where o.order_id LIKE CONCAT(@0, '%') or o.order_status LIKE CONCAT(@0,'%') or o.order_amount LIKE CONCAT(@0,'%')";
@@ -17,19 +14,22 @@
 <div class="jumbotron pt-1 pb-1 mt-2 ">
     <h2 class="text-center">Payment Analysis</h2>
 </div>
-    <div class="row">
+<div class="row">
+    <div class="col-12">
         <form method="post" action="/Home/Index">
             <div class="input-group">
 
-                <div class="col-7 mb-1">
+                <div class="col-7">
                     <input type="text" name="searchText" class="form-control" placeholder="SearchText">
                 </div>
-                <div class="col-3">
-                    <button class="btn btn-primary" type="submit">Search by Order Status</button>
+                <div class="col-4">
+                    <button class="btn btn-primary" type="submit">Search according to Order Status</button>
                 </div>
             </div>
+
         </form>
     </div>
+</div>
 
     @if (output.Count() > 0)
     {
@@ -40,12 +40,12 @@
                     <h5 class="card-header">Order ID:@i.order_id</h5>
                     <div class="card-body">
                         <img class="card-img" src="https://img.freepik.com/free-vector/blank-junk-food-frame-background_53876-99223.jpg?w=900&t=st=1694265433~exp=1694266033~hmac=567efab42c11941d2c97a753ab6db42ec2216c5bb1e17f7f00458d4bdf39eca3" alt="Card image cap">
-                        <p class="card-title">Order Status:@i.order_status</p>
-                        <p class="card-text">Order Amount:@i.order_amount.ToString("C")</p>
-                        <p class="card-text">Channel: @i.channel_id</p>
+                        <p class="card-title">Order_Status:@i.order_status</p>
+                        <p class="card-text">Order_Amount:@i.order_amount.ToString("C")</p>
+                        <p class="card-text">Channel_ID: @i.channel_id</p>
                         <h6>Store Details</h6>
-                        <p class="card-text">Store Name:@i.store_name</p>
-                        <p class="card-text">Store Segment:@i.store_segment</p>
+                        <p class="card-text">Store_Name:@i.store_name</p>
+                        <p class="card-text">Store_Segment:@i.store_segment</p>
                         <a href="/Home/Details?id=@i.order_id" class="btn btn-primary">See details</a>
                     </div>
                 </div>
@@ -54,6 +54,6 @@
     }
     else
     {
-        <h2 class="text-danger text-center">Oops! No matching orders found...</h2>
+<h2 class="text-danger text-center">Sorry The Oder Was Not Found!!...</h2>
     }
 </main>
